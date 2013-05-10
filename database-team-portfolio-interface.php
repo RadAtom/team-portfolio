@@ -1,4 +1,3 @@
-
 <?php
 /*
 This file is responsible for handling all of the following:
@@ -6,7 +5,7 @@ This file is responsible for handling all of the following:
 2. initizlizer functions for custom database
 3. a class to handle any database interaction
 */
-class Project {
+class DatabaseInterface {
     var $id;
     var $memberId;
     var $skillId
