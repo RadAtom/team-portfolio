@@ -6,9 +6,7 @@ This file is responsible for handling all of the following:
 3. a class to handle any database interaction
 */
 class DatabaseInterface {
-    var $id;
-    var $memberId;
-    var $skillId
+    var datapoints;
 
 
     private function __construct()

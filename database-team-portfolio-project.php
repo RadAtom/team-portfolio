@@ -1,12 +1,13 @@
-
 <?php
+
+require_once('database-team-portfolio-interface.php');
 /*
 This file is responsible for handling all of the following:
 1. wordpress hooks for custom database
 2. initizlizer functions for custom database
 3. a class to handle any database interaction
 */
-class Project {
+class ProjectsImages extends foo{
     var $id;
     var $memberId;
     var $skillId
@@ -14,7 +15,7 @@ class Project {
 
     private function __construct()
     {
-
+    	
     }
 
     
