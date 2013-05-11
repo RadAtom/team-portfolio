@@ -7,7 +7,7 @@ This file is responsible for handling all of the following:
 2. initizlizer functions for custom database
 3. a class to handle any database interaction
 */
-class ProjectsImages extends foo{
+class Member extends foo{
     var $id;
     var $memberId;
     var $skillId

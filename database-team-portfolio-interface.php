@@ -6,13 +6,37 @@ This file is responsible for handling all of the following:
 3. a class to handle any database interaction
 */
 class DatabaseInterface {
-    var datapoints;
+    private var tableName;
+    private var datapoints;
 
 
-    private function __construct()
+    public function __construct()
     {
 
     }
 
+    public function addKeyValue()
+    {
+
+    }
+
+    public function readFromDatabase()
+    {
+    	
+    }
     
+    public function insetIntoDatabase()
+    {
+
+    }
+
+    public function updateToDatabase()
+    {
+
+    }
+
+    public function deleteFromDatabase()
+    {
+
+    }
 ?>
