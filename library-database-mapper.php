@@ -39,7 +39,7 @@ class TeamPortfolioDatabase {
 
     /*functions for member related stuff*/
     public function getAllMembers(){
-        
+        $membersClassArray = Member::getAllMembers();
     }
 
     public function getMember($memberID){
