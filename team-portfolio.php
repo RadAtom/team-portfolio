@@ -32,15 +32,10 @@ Execution setup:
 3. ????
 4. profit
 */
-require_once ('library-admin-pages.php');
-require_once ('library-database-mapper.php');
-require_once ('library-plugin-settings.php');
-require_once ('library-plugin-tags');
-
-team_portfolio_adamin_pages_initialize();
-team_portfolio_database_mapper_initialize();
-team_portfolio_plugin_settings_initialize();
-team_portfolio_plugin_tags_initialize();
-
+require_once('skillposts.php');
+require_once('memberposts.php');
+require_once('projectposts.php');
+require_once('adminbackend.php');
+require_once('portfoliotags.php');
 //that should be all that this file has to handle
 ?>
