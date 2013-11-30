@@ -6,11 +6,24 @@ class ProjectPosts{
 	{
 		add_action('init',array($this, 'register_post_type'));
 		add_filter( 'post_updated_messages', array($this, 'post_updated_message') );
-		add_action( 'add_meta_boxes', array($this, 'register_associated_skills_meta'));
-		add_action( 'add_meta_boxes', array($this, 'register_associated_members_meta') );
-		add_action( 'save_post', array($this, 'run_project_skills_save') ); 
-		add_action( 'save_post', array($this, 'run_project_members_save') ); 
+		add_action( 'add_meta_boxes_projects', array($this, 'register_associated_skills_meta'));		
+		add_action( 'save_post', array($this, 'run_project_skills_save'), 10, 2  ); 
+		add_action( 'init', array($this, 'register_projectss_sidebar') );
+		
 	}
+
+	function register_projectss_sidebar(){
+		register_sidebar(array(
+			'name' => __( 'Project Post Sidebar' ),
+			'id' => 'project-post-sidebar',
+			'before_widget' => '',
+			'after_widget' => '',
+			'before_title' => '<h4>',
+			'after_title' => '</h4>',
+		));
+	}
+
+	
 
 	public function register_post_type(){
 		$labels = array(
@@ -59,138 +72,80 @@ class ProjectPosts{
 
 	public function register_associated_skills_meta(){
 		add_meta_box( 
-	        'project_skills_box',
-	        'Projects Skills',
+	        'project_meta_box',
+	        'Projects Skills and Members',
 	        array($this, 'project_skills'),
 	        'projects',
 	        'normal',
 	        'high'
 	    );
 	}
-
-	public function register_associated_members_meta(){
-		add_meta_box( 
-	        'project_members_box',
-	        'Projects Members',
-	        array($this, 'project_members'),
-	        'projects',
-	        'normal',
-	        'high'
-	    );
-	}
-
-	public function project_skills(){
-		wp_nonce_field( 'my_project_skill_meta_nonce', 'project_skill_meta_nonce' );
+	public function project_skills($post){
+		wp_nonce_field( basename( __FILE__ ), 'projects_metabox_nonce' );
 		$skills = WordPressFinder::getSkills();
-		global $post;
-		$previousMeta = get_post_custom( $post->ID );
-		$previousIdsString = $previousMeta['project_skills_ids'];
-		$previousIDs = explode(",", $previousIdsString);
-		?>
-		<h4>Select which Skills are associated with this project.</h4>
-		<p><?php
-		foreach ($skills as $skill) {
-			$isChecked = false;
-			if(count()){
-				foreach ($previousIDs as $id) {
-					if($id == $skill['id']){
-						$isChecked = true;
-					}
-				}
-			}
-			?>
-			<input type="checkbox" id="skill<?php echo $skill['id'];?>" name="skill<?php echo$skill['id'];?>" <?php if($isChecked){echo 'checked="checked"'}?> />
-        	<label for="skill<?php echo$skill['id'];?>"> <a href="<?php echo$skill['link'];?>" target="_blank"><?php echo$skill['title'];?></a> </label>  
-			</br>
-			<?php
-		}
-		?></p><?php
-	}
-
-	public function project_members(){
-		wp_nonce_field( 'my_project_member_meta_nonce', 'project_member_meta_nonce' );
 		$members = WordPressFinder::getMembers();
-		global $post;
-		$previousMeta = get_post_custom( $post->ID );
-		$previousIdsString = $previousMeta['project_members_ids'];
-		$previousIDs = explode(",", $previousIdsString);
-		?>
-		<h4>Select which Members are associated with this project.</h4>
-		<p><?php
-		foreach ($members as $member) {
-			$isChecked = false;
-			if(count($previousIDs)){
-				foreach ($previousIDs as $id) {
-					if($id == $member['id']){
-						$isChecked = true;
+		$skillsMeta=get_post_meta($post->ID, "skills", true);
+		$membersMeta=get_post_meta($post->ID, "members", true);
+		echo '<h4>Select The Skills Which you would like to associate with this Project</h4>';
+		//echo var_dump($skillsMeta);
+		if($skills){
+			foreach($skills as $skill){
+				$ischecked = false;
+				foreach($skillsMeta as $idss){
+					//echo (int) $idss;
+					if((int) $skill['id']==(int) $idss){
+						$ischecked = true;
+						//echo 'true';
 					}
 				}
+				?>
+				<input type="checkbox" name="skills[]" value="<?php echo $skill['id'];?>" <?php checked($ischecked); ?> /> <?php echo $skill['title']; ?>
+				<?php
 			}
-			
-			?>
-			<input type="checkbox" id="member<?php echo $member['id'];?>" name="member<?php echo$member['id'];?>" <?php if($isChecked){echo 'checked="checked"'}?> />
-        	<label for="member<?php echo$member['id'];?>"> <a href="<?php echo $member['link'];?>" target="_blank"><?php echo$member['title'];?></a> </label>  
-			</br>
-			<?php
+		}else{
+			echo 'You need to create some skills pages!';
 		}
-		?></p><?php
+		
+		echo '<h4>Select The Members Which you would like to associate with this Project</h4>';
+		if($members){
+			foreach($members as $member){
+				$ischeckedman = false;
+				foreach($membersMeta as $memberthings){
+					//echo (int) $memberthings;
+					if((int) $member['id']==(int) $memberthings){
+						$ischeckedman = true;
+					}
+				}
+				?>
+				<input type="checkbox" name="members[]" value="<?php echo $member['id'];?>" <?php checked($ischeckedman); ?> /> <?php echo $member['title']; ?>
+				<?php
+			}
+		}else{
+			echo 'You need to create some members pages!';
+		}
 	}
 
-	public function run_project_skills_save($post_id){
+	public function run_project_skills_save($post_id, $post){
 		// Bail if we're doing an auto save  
 	    if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return; 
 	     
 	    // if our nonce isn't there, or we can't verify it, bail 
-	    if( !isset( $_POST['project_skill_meta_nonce'] ) || !wp_verify_nonce( $_POST['project_skill_meta_nonce'], 'my_project_skill_meta_nonce' ) ) return; 
+	    if ( !isset( $_POST['projects_metabox_nonce'] ) || !wp_verify_nonce( $_POST['projects_metabox_nonce'], basename( __FILE__ ) ) )
+		return $post_id; 
 	     
 	    // if our current user can't edit this post, bail  
 	    if( !current_user_can( 'edit_post' ) ) return;
-
-	    $finalSkills = array();
-	    $skills = WordPressFinder::getSkills();
-	    $hadAkey = false;
-	    foreach ($skills as $skill) {
-	    	$key = "skill{$skill['id']}";
-	    	if( isset($_POST[$key]) ){
-	    		if($_POST[$key]){
-	    			$hadAkey = true;
-	    			$finalSkills[] = $skill['id'];
-	    		}
-	    	}
+	    if($post->post_type == 'projects'){
+	    	if ( isset( $_POST['skills'] ) && $_POST['skills'] != '' ) {
+	            update_post_meta( $post_id, 'skills', $_POST['skills'] );
+	        }
+	        if ( isset( $_POST['members'] ) && $_POST['members'] != '' ) {
+	            update_post_meta( $post_id, 'members', $_POST['members'] );
+	        }
 	    }
-	    $properReturn = implode(",", $finalSkills);
-	    if($hadAkey){
-	    	update_post_meta( $post_id, 'project_members_ids', $properReturn ); 
-	    }
+	    return $post_id;
 	}
 
-	public function run_project_members_save($post_id){
-		// Bail if we're doing an auto save  
-	    if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return; 
-	     
-	    // if our nonce isn't there, or we can't verify it, bail 
-	    if( !isset( $_POST['project_member_meta_nonce'] ) || !wp_verify_nonce( $_POST['project_member_meta_nonce'], 'my_project_member_meta_nonce' ) ) return; 
-	     
-	    // if our current user can't edit this post, bail  
-	    if( !current_user_can( 'edit_post' ) ) return;
-
-	    $finalMembers = array();
-	    $members = WordPressFinder::getMembers();
-	    $hadAkey = false;
-	    foreach ($members as $member) {
-	    	$key = "member{$member['id']}";
-	    	if( isset($_POST[$key]) ){
-	    		if($_POST[$key]){
-	    			$hadAkey = true;
-	    			$finalMembers[] = $member['id'];
-	    		}
-	    	}
-	    }
-	    $properReturn = implode(",", $finalMembers);
-	    if($hadAkey){
-	    	update_post_meta( $post_id, 'project_members_ids', $properReturn ); 
-	    }
-	}
 }
 
 $projectPosts = new ProjectPosts;

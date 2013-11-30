@@ -32,10 +32,47 @@ Execution setup:
 3. ????
 4. profit
 */
+if ( ! defined( 'BBROKENDOOR_BASE_FILE' ) )
+    define( 'BBROKENDOOR_BASE_FILE', __FILE__ );
+if ( ! defined( 'BROKENDOOR_BASE_DIR' ) )
+    define( 'BROKENDOOR_BASE_DIR', dirname( BBROKENDOOR_BASE_FILE ) );
+if ( ! defined( 'BROKENDOOR_PLUGIN_URL' ) )
+    define( 'BROKENDOOR_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+
 require_once('skillposts.php');
-require_once('memberposts.php');
 require_once('projectposts.php');
-require_once('adminbackend.php');
 require_once('portfoliotags.php');
+require_once('memeberposts.php');
+require_once('portfoliowidgets.php');
+function portfolio_page_template( $template_path ) {
+    if ( get_post_type() == 'projects' ) {
+        if ( is_single() ) {
+            if ( $theme_file = locate_template( array( 'single-projects.php' ) ) ) {
+                $template_path = $theme_file;
+            } else {
+                $template_path = plugin_dir_path( __FILE__ ) .'single-projects.php';
+            }
+        }
+    }else if ( get_post_type() == 'members' ) {
+        if ( is_single() ) {
+            if ( $theme_file = locate_template( array( 'single-members.php' ) ) ) {
+                $template_path = $theme_file;
+            } else {
+                $template_path = plugin_dir_path( __FILE__ ) .'single-members.php';
+            }
+        }
+    }else if ( get_post_type() == 'skills' ) {
+        if ( is_single() ) {
+            if ( $theme_file = locate_template( array( 'single-skills.php' ) ) ) {
+                $template_path = $theme_file;
+            } else {
+                $template_path = plugin_dir_path( __FILE__ ) .'single-skills.php';
+            }
+        }
+    }
+    return $template_path;
+}
+
+add_filter( 'template_include', 'portfolio_page_template', 1 );
 //that should be all that this file has to handle
 ?>
