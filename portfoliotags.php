@@ -280,33 +280,6 @@ class PortfolioTags{
 		return implode("\n", $html);
 	}
 
-	private count;
-	private function penis(){
-		$this->count = 4;
-
-	}
-
-	public function getmefoodwhore(){
-		if(empty($this->count)){
-			$this->penis();
-		}
-		return $this->count;
-	}
-
-	public setdick($dick){
-		$this->count = $dick;
-	}
 }
 
 $tags = new PortfolioTags;
-$tagssss = new PortfolioTags;
-$tags->setdick(5);
-$tagssss->setdick(5565);
-//would fucking break
-$tags->penis();
-
-$tags->getmefoodwhore();
-
-
-//would fucking work
-$tags->getmefoodwhore();
