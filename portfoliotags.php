@@ -1,5 +1,6 @@
 <?php
 require_once('finderhelper.php');
+require_once('portfoliohtmlgenerator.php');
 
 class PortfolioTags{
 	public function __construct(){
@@ -116,30 +117,7 @@ class PortfolioTags{
 	}
 
 	public function projects_overview($atts){
-		/*
-		STILL TO DO
-		
-		*/
-		
-		$html =  array();
-		$projects = WordPressFinder::getProjects();
-		$projectGridSize = count($projects);
-		if($projectGridSize){
-			$html[] = '<div class="small-12 columns" id="projects-overview">';
-			$html[] = '<h3>Our Projects</h3>';
-			//list out the chosen projects
-		
-			$html[] = '<ul class=" small-block-grid-2 large-block-grid-'. $projectGridSize .'">';
-			foreach ($projects as $project) {
-				$html[] = '<li>';
-				$html[] = '<a href="'.$project['link'].'"><h4 >'.$project['title'].'</h4><img src="'.$project['image_url'].'" alt="'.$project['image_alt'].'"></a>';
-				$html[] = '</li>';
-			}
-			$html[] = '</ul>';
-			$html[] = '</div>';
-		}
-		// return the list html
-		return implode("\n", $html);
+		return PortfolioHTMLGenerator::projectsOverviewString();
 	}
 
 	public function members_overview($atts){
@@ -301,6 +279,34 @@ class PortfolioTags{
 		// return the list html
 		return implode("\n", $html);
 	}
+
+	private count;
+	private function penis(){
+		$this->count = 4;
+
+	}
+
+	public function getmefoodwhore(){
+		if(empty($this->count)){
+			$this->penis();
+		}
+		return $this->count;
+	}
+
+	public setdick($dick){
+		$this->count = $dick;
+	}
 }
 
 $tags = new PortfolioTags;
+$tagssss = new PortfolioTags;
+$tags->setdick(5);
+$tagssss->setdick(5565);
+//would fucking break
+$tags->penis();
+
+$tags->getmefoodwhore();
+
+
+//would fucking work
+$tags->getmefoodwhore();

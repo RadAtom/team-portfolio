@@ -44,6 +44,7 @@ require_once('projectposts.php');
 require_once('portfoliotags.php');
 require_once('memeberposts.php');
 require_once('portfoliowidgets.php');
+
 function portfolio_page_template( $template_path ) {
     if ( get_post_type() == 'projects' ) {
         if ( is_single() ) {
