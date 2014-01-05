@@ -14,106 +14,11 @@ class PortfolioTags{
 	}
 
 	public function portfolio_overview($atts){
-		/*
-		STILL TO DO:
-		get the chosen projects populated
-		get the chosen skills populated
-		get the chosen members populated
-		get a quick blurb about the portfolio
-		*/
-		
-
-		$html =  array();
-
-		$html[] = '<div class="small-12 columns" id="team-portfolio-related-overviews">';
-
-		//base portfolio overview
-		$html[] = '<div class="small-12 small-centered columns">';
-		$html[] = '<h3>Our Portfolio</h3>';
-		$html[] = '</div>';
-
-
-		//projects stuff
-		$projects = WordPressFinder::getProjects();
-		$projectGridSize = count($projects);
-		if($projectGridSize){
-			$html[] = '<div class="small-12 columns" id="projects-overview">';
-			$html[] = '<h3>Our Projects</h3>';
-			//list out the chosen projects
-		
-			$html[] = '<ul class=" small-block-grid-2 large-block-grid-'. $projectGridSize .'">';
-			foreach ($projects as $project) {
-				$html[] = '<li>';
-				$html[] = '<a href="'.$project['link'].'"><h4 >'.$project['title'].'</h4><img src="'.$project['image_url'].'" alt="'.$project['image_alt'].'"></a>';
-				$html[] = '</li>';
-			}
-			$html[] = '</ul>';
-			$html[] = '</div>';
-		}
-		
-
-		$members = WordPressFinder::getMembers();
-		$memberGridSize = count($members);
-		if($memberGridSize){
-			//skills then members
-			$html[] = '<div class="small-12 large-6 columns" id="members-overview">';
-			$html[] = '<h3>Our Members</h3>';
-			//list out the chosen members
-			$html[] = '<ul class=" small-block-grid-2 large-block-grid-'. $memberGridSize .'">';
-			foreach ($members as $member) {
-				$html[] = '<li>';
-				$html[] = '<a href="'.$member['link'].'"><h4 >'.$member['title'].'</h4><img src="'.$member['image_url'].'" alt="'.$member['image_alt'].'"></a>';
-				$html[] = '</li>';
-			}
-			$html[] = '</ul>';
-			$html[] = '</div>';
-		}
-		
-		$skills = WordPressFinder::getSkills();
-		$skillsGridSize = count($skills);
-		if($skillsGridSize){
-			$html[] = '<div class="small-12 large-6 columns" id="skills-overview">';
-			$html[] = '<h3>Our Skills</h3>';
-			//list out the chosen skills
-			$html[] = '<ul class="small-block-grid-2 large-block-grid-'. $skillsGridSize .'">';
-			foreach ($skills as $skill) {
-				$html[] = '<li>';
-				$html[] = '<a href="'.$skill['link'].'"><h4 >'.$skill['title'].'</h4><img src="'.$skill['image_url'].'" alt="'.$skill['image_alt'].'"></a>';
-				$html[] = '</li>';
-			}
-			$html[] = '</ul>';
-			$html[] = '</div>';
-		}
-		
-
-		$html[] = '</div>';
-		// return the list html
-		return implode("\n", $html);
+		return PortfolioHTMLGenerator::overviewString();
 	}
 
 	public function skills_overview($atts){
-		/*
-		STILL TO DO
-		
-		*/
-		$html =  array();
-		$skills = WordPressFinder::getSkills();
-		$skillsGridSize = count($skills);
-		if($skillsGridSize){
-			$html[] = '<div class="small-12 large-6 columns" id="skills-overview">';
-			$html[] = '<h3>Our Skills</h3>';
-			//list out the chosen skills
-			$html[] = '<ul class="small-block-grid-2 large-block-grid-'. $skillsGridSize .'">';
-			foreach ($skills as $skill) {
-				$html[] = '<li>';
-				$html[] = '<a href="'.$skill['link'].'"><h4 >'.$skill['title'].'</h4><img src="'.$skill['image_url'].'" alt="'.$skill['image_alt'].'"></a>';
-				$html[] = '</li>';
-			}
-			$html[] = '</ul>';
-			$html[] = '</div>';
-		}
-		// return the list html
-		return implode("\n", $html);
+		return PortfolioHTMLGenerator::skillsOverviewString();
 	}
 
 	public function projects_overview($atts){
@@ -121,28 +26,7 @@ class PortfolioTags{
 	}
 
 	public function members_overview($atts){
-		/*
-		STILL TO DO
-		*/
-		$html =  array();
-		$members = WordPressFinder::getMembers();
-		$memberGridSize = count($members);
-		if($memberGridSize){
-			//skills then members
-			$html[] = '<div class="small-12 columns" id="members-overview">';
-			$html[] = '<h3>Our Members</h3>';
-			//list out the chosen members
-			$html[] = '<ul class=" small-block-grid-2 large-block-grid-'. $memberGridSize .'">';
-			foreach ($members as $member) {
-				$html[] = '<li>';
-				$html[] = '<a href="'.$member['link'].'"><h4 >'.$member['title'].'</h4><img src="'.$member['image_url'].'" alt="'.$member['image_alt'].'"></a>';
-				$html[] = '</li>';
-			}
-			$html[] = '</ul>';
-			$html[] = '</div>';
-		}
-		// return the list html
-		return implode("\n", $html);
+		return PortfolioHTMLGenerator::membersOverviewString();
 	}
 
 	public function member_overview($atts){

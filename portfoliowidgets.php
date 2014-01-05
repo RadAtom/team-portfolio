@@ -1,5 +1,5 @@
 <?php
-require_once('finderhelper.php');
+require_once('portfoliohtmlgenerator.php');
 
 class TeamPortfolioOverviewWidget extends WP_Widget {
 
@@ -14,73 +14,8 @@ class TeamPortfolioOverviewWidget extends WP_Widget {
 
 	public function widget( $args, $instance ) {
 		$title = apply_filters( 'widget_title', $instance['title'] );
-
-		$projects = WordPressFinder::getProjects();
-		$projectGridSize = count($projects);
-		$members = WordPressFinder::getMembers();
-		$memberGridSize = count($members);
-		$skills = WordPressFinder::getSkills();
-		$skillsGridSize = count($skills);
-		if($projectGridSize > 3){
-			$projectGridSize = 3;
-		}
-		if($memberGridSize > 3){
-			$memberGridSize = 3;
-		}
-		if($skillsGridSize > 3){
-			$skillsGridSize = 3;
-		}
-
 		echo $args['before_widget'];
-		echo '<div class="small-12 small-centered columns" id="team-portfolio-related-overviews">';
-
-		if ( ! empty( $title ) ){
-			echo '<div class="small-12 small-centered columns">';
-			echo $args['before_title'] . $title . $args['after_title'];
-			echo '</div>';
-		}
-		if($projectGridSize){
-			echo '<div class="small-12 columns" id="projects-overview">';
-			echo '<h3>Our Projects</h3>';
-			//list out the chosen projects
-		
-			echo '<ul class=" small-block-grid-2 large-block-grid-'. $projectGridSize .'">';
-			foreach ($projects as $project) {
-				echo '<li>';
-				echo '<a href="'.$project['link'].'"><h4 >'.$project['title'].'</h4><img src="'.$project['image_url'].'" alt="'.$project['image_alt'].'"></a>';
-				echo '</li>';
-			}
-			echo '</ul>';
-			echo '</div>';
-		}
-		if($memberGridSize){
-			//skills then members
-			echo '<div class="small-12 columns" id="members-overview">';
-			echo '<h3>Our Members</h3>';
-			//list out the chosen members
-			echo '<ul class=" small-block-grid-2 large-block-grid-'. $memberGridSize .'">';
-			foreach ($members as $member) {
-				echo '<li>';
-				echo '<a href="'.$member['link'].'"><h4 >'.$member['title'].'</h4><img src="'.$member['image_url'].'" alt="'.$member['image_alt'].'"></a>';
-				echo '</li>';
-			}
-			echo '</ul>';
-			echo '</div>';
-		}
-		if($skillsGridSize){
-			echo '<div class="small-12 columns" id="skills-overview">';
-			echo '<h3>Our Skills</h3>';
-			//list out the chosen skills
-			echo '<ul class="small-block-grid-2 large-block-grid-'. $skillsGridSize .'">';
-			foreach ($skills as $skill) {
-				echo '<li>';
-				echo '<a href="'.$skill['link'].'"><h4 >'.$skill['title'].'</h4><img src="'.$skill['image_url'].'" alt="'.$skill['image_alt'].'"></a>';
-				echo '</li>';
-			}
-			echo '</ul>';
-			echo '</div>';
-		}
-		echo '</div>';
+		echo PortfolioHTMLGenerator::overviewString($title);
 		echo $args['after_widget'];
 	}
 
@@ -121,31 +56,8 @@ class TeamPortfolioSkillsWidget extends WP_Widget {
 
 	public function widget( $args, $instance ) {
 		$title = apply_filters( 'widget_title', $instance['title'] );
-		$skills = WordPressFinder::getSkills();
-		$skillsGridSize = count($skills);
-		if($skillsGridSize > 3){
-			$skillsGridSize = 3;
-		}
-
 		echo $args['before_widget'];
-		echo '<div class="small-12 columns" id="skills-overview">';
-
-		if ( ! empty( $title ) ){
-			echo $args['before_title'] . $title . $args['after_title'];
-		}else{
-			echo '<h3>Our Skills</h3>';
-		}
-		if($skillsGridSize){
-			echo '<ul class="small-block-grid-2 large-block-grid-'. $skillsGridSize .'">';
-			foreach ($skills as $skill) {
-				echo '<li>';
-				echo '<a href="'.$skill['link'].'"><h4 >'.$skill['title'].'</h4><img src="'.$skill['image_url'].'" alt="'.$skill['image_alt'].'"></a>';
-				echo '</li>';
-			}
-			echo '</ul>';
-			echo '</div>';
-		}
-		echo '</div>';
+		echo PortfolioHTMLGenerator::skillsOverviewString($title);
 		echo $args['after_widget'];
 	}
 
